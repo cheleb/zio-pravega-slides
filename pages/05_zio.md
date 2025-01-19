@@ -126,7 +126,33 @@ val simple: UIO[Int] = ZIO.succeed(42) // Succeed with an `A`, cannot fail, no r
 ```scala {3}
 val simple:                  UIO[Int]    = ZIO.succeed(42)
 
+def whatIsTheAnswer(i: Int)              = ZIO.succeed(s"The answer is $i")
+```
+```scala {3}
+val simple:                  UIO[Int]    = ZIO.succeed(42)
+
 def whatIsTheAnswer(i: Int): UIO[String] = ZIO.succeed(s"The answer is $i")
+```
+```scala {5}
+val simple:                     UIO[Int]     = ZIO.succeed(42)
+
+def whatIsTheAnswer(i: Int):    UIO[String]  = ZIO.succeed(s"The answer is $i")
+
+def sayItLoud(message: String):              = ZIO.attempt(printLine(message))
+```
+```scala {5}
+val simple:                     UIO[Int]     = ZIO.succeed(42)
+
+def whatIsTheAnswer(i: Int):    UIO[String]  = ZIO.succeed(s"The answer is $i")
+
+def sayItLoud(message: String): ZIO[Any, IOException, Unit] = ZIO.attempt(printLine(message))
+```
+```scala {5}
+val simple:                     UIO[Int]     = ZIO.succeed(42)
+
+def whatIsTheAnswer(i: Int):    UIO[String]  = ZIO.succeed(s"The answer is $i")
+
+def sayItLoud(message: String): ZIO[Any, IOException, Unit] = Console.printLine(message)
 ```
 ```scala {5}
 val simple:                     UIO[Int]     = ZIO.succeed(42)
@@ -226,7 +252,16 @@ val program: Task[Unit] = simple flatMap whatIsTheAnswer
                                                    // Interested ?
 ```
 ```scala
+val simple:                     UIO[Int]     = ZIO.succeed(42)                        // UIO[Int]
 
+val whatIsTheAnswer: Int    =>  UIO[String]  = i => ZIO.succeed(s"The answer is $i")  // Int => UIO[String]
+
+val sayItLoud:       String =>  Task[Unit]   = message => Console.printLine(message)  // String => Task[Unit]
+
+val program: Task[Unit] = simple |> whatIsTheAnswer
+                                 |> sayIntLoud 
+```
+```scala {*|7-8|7|8}
 val simple:                     UIO[Int]     = ZIO.succeed(42)                        // UIO[Int]
 
 val whatIsTheAnswer: Int    =>  UIO[String]  = i => ZIO.succeed(s"The answer is $i")  // Int => UIO[String]
@@ -236,8 +271,8 @@ val sayItLoud:       String =>  Task[Unit]   = message => Console.printLine(mess
 extension [R, E, A](zio: ZIO[R, E, A])
     def |>[R1, E1 <: E, B](f: A => ZIO[R1, E1, B]): ZIO[R1, E1, B] = zio.flatMap(f)
 
-val program: Task[Unit] = simple flatMap whatIsTheAnswer
-                              💥 flatMap sayIntLoud 
+val program: Task[Unit] = simple |> whatIsTheAnswer
+                                 |> sayIntLoud 
 ```
 ```scala
 
