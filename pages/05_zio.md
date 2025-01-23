@@ -323,7 +323,7 @@ val simple:                             UIO[Int]     = ZIO.succeed(42)
 
 def whatIsTheAnswer(i: Int):            UIO[String]  = ZIO.succeed(s"The answer is $i")
 
-def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(message).repeatN(i%2)
+def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(s"$message and isEven: ${i % 2 == 0}")
 
 val program: Task[Unit] = simple.flatMap(i => whatIsTheAnswer(i))
                                 .flatMap(str => sayIntLoud(str, 💥i)) // Won't compile
@@ -333,7 +333,7 @@ val simple:                             UIO[Int]     = ZIO.succeed(42)
 
 def whatIsTheAnswer(i: Int):            UIO[String]  = ZIO.succeed(s"The answer is $i")
 
-def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(message).repeatN(i%2)
+def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(s"$message and isEven: ${i % 2 == 0}")
 
 val program: Task[Unit]  = simple.flatMap { i => 
                                               whatIsTheAnswer(i)
@@ -348,7 +348,7 @@ val simple:                             UIO[Int]     = ZIO.succeed(42)
 
 def whatIsTheAnswer(i: Int):            UIO[String]  = ZIO.succeed(s"The answer is $i")
 
-def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(message).repeatN(i%2)
+def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(s"$message and isEven: ${i % 2 == 0}")
 
 val program: Task[Unit] = for { // For comprehension
     i   <- simple
@@ -361,7 +361,7 @@ val simple:                             UIO[Int]     = ZIO.succeed(42)
 
 def whatIsTheAnswer(i: Int):            UIO[String]  = ZIO.succeed(s"The answer is $i")
 
-def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(message).repeatN(i%2)
+def sayItLoud(message: String, i: Int): Task[Unit]   = Console.printLine(s"$message and isEven: ${i % 2 == 0}")
 
 val program: Task[Unit] = for
     i   <- simple
